@@ -1,121 +1,65 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { GroundingSource, SearchFilters } from "../types";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+// NOTE: This service now calls the backend /api endpoints.
+// This requires the app to be deployed (e.g., on Vercel) to work correctly.
 
 export const performResearch = async (
   topic: string, 
   filters: SearchFilters,
   onStream: (text: string, sources?: GroundingSource[]) => void
 ): Promise<void> => {
-  const ai = getAI();
-  
-  let prompt = `Perform a comprehensive research search on the topic: "${topic}". `;
-  
-  if (filters.yearStart || filters.yearEnd || filters.author || filters.journal) {
-    prompt += `\nStrictly prioritize sources matching these criteria:`;
-    if (filters.yearStart) prompt += `\n- Published after: ${filters.yearStart}`;
-    if (filters.yearEnd) prompt += `\n- Published before: ${filters.yearEnd}`;
-    if (filters.author) prompt += `\n- Author: ${filters.author}`;
-    if (filters.journal) prompt += `\n- Journal/Conference: ${filters.journal}`;
-  }
-
-  prompt += `\nFocus on finding academic papers, technical articles, or reputable sources. 
-  Summarize the current state of the art or key discussions around this topic.
-  Do not format as JSON. Write a clear, structured research summary.`;
-
   try {
-    const response = await ai.models.generateContentStream({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        tools: [{ googleSearch: {} }],
-      }
+    const response = await fetch('/api/research', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, filters }),
     });
 
-    let fullText = '';
-    let sources: GroundingSource[] = [];
-
-    for await (const chunk of response) {
-      const text = chunk.text;
-      if (text) {
-        fullText += text;
-      }
-      
-      // Extract grounding chunks if available
-      const chunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
-      if (chunks) {
-        chunks.forEach((c: any) => {
-          if (c.web?.uri && c.web?.title) {
-            sources.push({
-              title: c.web.title,
-              uri: c.web.uri
-            });
-          }
-        });
-      }
-      
-      onStream(fullText, sources.length > 0 ? sources : undefined);
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.statusText}`);
     }
+
+    const data = await response.json();
+    
+    let sources: GroundingSource[] = [];
+    if (data.groundingMetadata?.groundingChunks) {
+      data.groundingMetadata.groundingChunks.forEach((c: any) => {
+        if (c.web?.uri && c.web?.title) {
+          sources.push({
+            title: c.web.title,
+            uri: c.web.uri
+          });
+        }
+      });
+    }
+
+    // Since serverless functions (basic) return once, we simulate a stream or just send full text
+    onStream(data.text, sources.length > 0 ? sources : undefined);
+
   } catch (error) {
     console.error("Research error:", error);
-    onStream("An error occurred while researching. Please check your API key or try again.");
+    onStream("Error: Could not connect to the research server. If you are running this locally without a backend, this is expected. Please deploy to Vercel.");
   }
 };
 
 export const analyzePaper = async (title: string, url: string): Promise<{ summary: string, findings: string[], citationMetadata: any }> => {
-  const ai = getAI();
-  
-  const prompt = `
-    Analyze the following research source:
-    Title: ${title}
-    URL: ${url}
-
-    Please provide:
-    1. A concise summary of the paper/article (approx 150 words).
-    2. A list of 3-5 key findings or takeaways.
-    3. Extract citation metadata if available (Authors, Publication Year, Publisher/Journal).
-
-    Output in JSON format with keys: "summary" (string), "findings" (array of strings), and "citationMetadata" (object).
-  `;
-
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            summary: { type: Type.STRING },
-            findings: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING }
-            },
-            citationMetadata: {
-              type: Type.OBJECT,
-              properties: {
-                authors: { type: Type.ARRAY, items: { type: Type.STRING } },
-                publicationDate: { type: Type.STRING },
-                publisher: { type: Type.STRING },
-                doi: { type: Type.STRING }
-              }
-            }
-          }
-        }
-      }
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, url }),
     });
 
-    const text = response.text;
-    if (!text) throw new Error("No response from AI");
-    
-    return JSON.parse(text);
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.statusText}`);
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("Analysis error:", error);
     return {
-      summary: "Could not generate summary at this time.",
-      findings: ["Analysis failed."],
+      summary: "Could not connect to analysis server. Please deploy to Vercel.",
+      findings: ["Server connection failed."],
       citationMetadata: { authors: [], publicationDate: '', publisher: '' }
     };
   }
