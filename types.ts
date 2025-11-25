@@ -16,10 +16,7 @@ export interface Folder {
   id: string;
   name: string;
   icon?: string;
-<<<<<<< HEAD
-=======
   synthesis?: string; // AI generated summary of the folder
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 }
 
 export interface GroundingSource {
@@ -32,10 +29,7 @@ export interface CitationMetadata {
   publicationDate?: string;
   publisher?: string;
   doi?: string;
-<<<<<<< HEAD
-=======
   pageCount?: number;
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 }
 
 export interface Paper {

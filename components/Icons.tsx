@@ -8,10 +8,7 @@ import {
   ExternalLink, 
   Bot, 
   ChevronRight, 
-<<<<<<< HEAD
-=======
   ChevronLeft, 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   Menu,
   X,
   Sparkles,
@@ -28,9 +25,6 @@ import {
   Quote,
   Calendar,
   PenTool,
-<<<<<<< HEAD
-  Hash
-=======
   Hash,
   Minus,
   ZoomIn,
@@ -39,7 +33,6 @@ import {
   Lightbulb,
   History,
   Clock
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 } from 'lucide-react';
 
 export const Icons = {
@@ -51,10 +44,7 @@ export const Icons = {
   ExternalLink,
   Bot,
   ChevronRight,
-<<<<<<< HEAD
-=======
   ChevronLeft,
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   Menu,
   X,
   Sparkles,
@@ -71,9 +61,6 @@ export const Icons = {
   Quote,
   Calendar,
   PenTool,
-<<<<<<< HEAD
-  Hash
-=======
   Hash,
   Minus,
   ZoomIn,
@@ -82,5 +69,4 @@ export const Icons = {
   Lightbulb,
   History,
   Clock
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 };

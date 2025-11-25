@@ -1,11 +1,7 @@
 {
   "name": "lumina-research",
   "private": true,
-<<<<<<< HEAD
-  "version": "0.0.0",
-=======
   "version": "1.0.0",
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,20 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "react": "^19.2.0",
-    "@google/genai": "^1.30.0",
-    "lucide-react": "^0.554.0",
-    "react-dom": "^19.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  }
-}
-=======
     "@google/genai": "^1.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
@@ -42,4 +24,3 @@
     "vite": "^5.4.1"
   }
 }
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc

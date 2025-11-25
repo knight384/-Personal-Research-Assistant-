@@ -1,21 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 
-<<<<<<< HEAD
-// This file will run on the Vercel Server
-// It securely uses the process.env.API_KEY
-=======
-export const config = {
-  runtime: 'edge',
-};
-
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
-export default async function handler(request: Request) {
-  if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { topic, filters } = await request.json();
+    const { topic, filters } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     let prompt = `Perform a comprehensive research search on the topic: "${topic}". `;
@@ -43,14 +34,10 @@ export default async function handler(request: Request) {
     const text = response.text;
     const groundingMetadata = response.candidates?.[0]?.groundingMetadata;
 
-    return new Response(JSON.stringify({ text, groundingMetadata }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ text, groundingMetadata });
 
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  } catch (error) {
+    console.error("Research API Error:", error);
+    return res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 }

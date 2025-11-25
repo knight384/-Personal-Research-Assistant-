@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useRef, useEffect } from 'react';
-=======
 import React, { useState, useRef, useEffect, useMemo } from 'react';
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 import { ChatMessage, GroundingSource, SearchFilters } from '../types';
 import { performResearch } from '../services/gemini';
 import { GlassCard } from './GlassCard';
@@ -13,12 +9,6 @@ interface ResearchViewProps {
   savedUrls: Set<string>;
 }
 
-<<<<<<< HEAD
-export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrls }) => {
-  const [query, setQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-=======
 const ThinkingIndicator = () => {
   const steps = [
     "Searching academic sources...",
@@ -56,7 +46,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
   const [showFilters, setShowFilters] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   
   const [filters, setFilters] = useState<SearchFilters>({
     yearStart: '',
@@ -75,8 +64,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-<<<<<<< HEAD
-=======
   // Load history on mount
   useEffect(() => {
     const saved = localStorage.getItem('lumina_search_history');
@@ -89,7 +76,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
     }
   }, []);
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -98,11 +84,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
     scrollToBottom();
   }, [messages]);
 
-<<<<<<< HEAD
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim() || isSearching) return;
-=======
   // Calculate all unique PDF URLs found in the conversation
   const allPdfUrls = useMemo(() => {
     const urls = new Set<string>();
@@ -132,16 +113,11 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
     const newHistory = [searchText, ...searchHistory.filter(h => h !== searchText)].slice(0, 10);
     setSearchHistory(newHistory);
     localStorage.setItem('lumina_search_history', JSON.stringify(newHistory));
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
       role: 'user',
-<<<<<<< HEAD
-      text: query
-=======
       text: searchText
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
     };
 
     const modelMsgId = (Date.now() + 1).toString();
@@ -153,16 +129,10 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
     };
 
     setMessages(prev => [...prev, userMsg, modelMsg]);
-<<<<<<< HEAD
-    setQuery('');
-    setIsSearching(true);
-    setShowFilters(false);
-=======
     setQuery(''); // Clear input if it matches
     setIsSearching(true);
     setShowFilters(false);
     setShowHistory(false);
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
     await performResearch(userMsg.text, filters, (text, sources) => {
       setMessages(prev => prev.map(msg => 
@@ -175,11 +145,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
     setIsSearching(false);
   };
 
-<<<<<<< HEAD
-  return (
-    <div className="h-full flex flex-col relative overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 pb-40">
-=======
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     executeSearch(query);
@@ -212,32 +177,13 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6 pb-40 scroll-smooth">
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-3xl animate-fade-in-up ${msg.role === 'user' ? 'ml-12' : 'mr-12'}`}>
               
-<<<<<<< HEAD
-              {msg.role === 'model' && (
-                <div className="flex items-center space-x-2 mb-2 text-slate-400 text-xs uppercase tracking-wider font-semibold">
-                  <Icons.Bot size={14} />
-                  <span>Research Agent</span>
-                </div>
-              )}
-
-              <GlassCard className={`p-6 ${msg.role === 'user' ? 'bg-blue-600/20 border-blue-500/30' : 'bg-slate-900/40'}`}>
-                {msg.isThinking && !msg.text ? (
-                   <div className="flex space-x-2 items-center text-slate-400">
-                     <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
-                     <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-75" />
-                     <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-150" />
-                     <span className="text-sm">Searching academic sources...</span>
-                   </div>
-=======
               <GlassCard className={`p-6 ${msg.role === 'user' ? 'bg-blue-600/20 border-blue-500/30' : 'bg-slate-900/40'}`}>
                 {msg.isThinking && !msg.text ? (
                    <ThinkingIndicator />
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                 ) : (
                   <div className="prose prose-invert prose-sm max-w-none">
                     <div className="whitespace-pre-wrap leading-relaxed">
@@ -251,14 +197,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
                 <div className="mt-4 grid gap-3 grid-cols-1 md:grid-cols-2">
                   {msg.sources.map((source, idx) => {
                     const isSaved = savedUrls.has(source.uri);
-<<<<<<< HEAD
-                    return (
-                      <GlassCard key={idx} className="p-3 flex flex-col justify-between group hover:border-blue-400/50">
-                        <div>
-                          <h4 className="font-semibold text-sm text-blue-100 line-clamp-2 mb-1" title={source.title}>
-                            {source.title}
-                          </h4>
-=======
                     const isPdf = source.uri.toLowerCase().endsWith('.pdf') || source.uri.includes('/pdf/');
                     
                     return (
@@ -272,7 +210,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
                               <span className="flex-shrink-0 text-[10px] font-bold bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded border border-red-500/20">PDF</span>
                             )}
                           </div>
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                           <a 
                             href={source.uri} 
                             target="_blank" 
@@ -321,10 +258,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
       <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/90 to-transparent z-10">
         <div className="max-w-3xl mx-auto space-y-2">
           
-<<<<<<< HEAD
-=======
           {/* Filters Panel */}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           {showFilters && (
             <GlassCard className="p-4 mb-2 animate-fade-in">
               <div className="flex items-center justify-between mb-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">
@@ -382,11 +316,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
             </GlassCard>
           )}
 
-<<<<<<< HEAD
-          <GlassCard className="p-2 flex items-center space-x-2 border-blue-500/20 shadow-blue-900/20">
-            <button 
-              onClick={() => setShowFilters(!showFilters)}
-=======
           {/* History Panel */}
           {showHistory && (
              <GlassCard className="p-4 mb-2 animate-fade-in max-h-60 overflow-y-auto">
@@ -427,15 +356,11 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
           <GlassCard className="p-2 flex items-center space-x-2 border-blue-500/20 shadow-blue-900/20">
             <button 
               onClick={() => { setShowFilters(!showFilters); setShowHistory(false); }}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
               className={`p-2 rounded-lg transition-colors ${showFilters ? 'bg-blue-500/20 text-blue-300' : 'text-slate-400 hover:bg-white/5'}`}
               title="Search Filters"
             >
               <Icons.Filter size={20} />
             </button>
-<<<<<<< HEAD
-            <form onSubmit={handleSearch} className="flex-1">
-=======
             <button 
               onClick={() => { setShowHistory(!showHistory); setShowFilters(false); }}
               className={`p-2 rounded-lg transition-colors ${showHistory ? 'bg-blue-500/20 text-blue-300' : 'text-slate-400 hover:bg-white/5'}`}
@@ -444,7 +369,6 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
               <Icons.Clock size={20} />
             </button>
             <form onSubmit={handleSearchSubmit} className="flex-1">
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
               <input
                 type="text"
                 className="w-full bg-transparent border-none text-white placeholder-slate-400 focus:outline-none py-2"
@@ -455,11 +379,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({ onAddPaper, savedUrl
               />
             </form>
             <button 
-<<<<<<< HEAD
-              onClick={handleSearch}
-=======
               onClick={() => executeSearch(query)}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
               disabled={!query.trim() || isSearching}
               className="p-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-white transition-colors"
             >

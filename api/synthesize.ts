@@ -1,19 +1,15 @@
 import { GoogleGenAI } from "@google/genai";
 
-export const config = {
-  runtime: 'edge',
-};
-
-export default async function handler(request: Request) {
-  if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { papers, folderName } = await request.json();
+    const { papers, folderName } = req.body;
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-    const papersContext = papers.map((p: any, index: number) => `
+    const papersContext = papers.map((p, index) => `
     [Paper ${index + 1}]
     Title: ${p.title}
     Summary: ${p.summary || 'No summary available'}
@@ -39,14 +35,10 @@ export default async function handler(request: Request) {
       contents: prompt,
     });
 
-    return new Response(JSON.stringify({ synthesis: response.text }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ synthesis: response.text });
 
-  } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  } catch (error) {
+    console.error("Synthesis API Error:", error);
+    return res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 }

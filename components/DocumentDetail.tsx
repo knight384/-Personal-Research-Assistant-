@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-=======
 import React, { useState, useEffect, useRef } from 'react';
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 import { Paper } from '../types';
 import { GlassCard } from './GlassCard';
 import { Icons } from './Icons';
@@ -16,10 +12,6 @@ interface DocumentDetailProps {
 
 export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, onUpdatePaper }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-<<<<<<< HEAD
-  const [activeTab, setActiveTab] = useState<'analysis' | 'notes'>('analysis');
-  const [notes, setNotes] = useState(paper.userNotes);
-=======
   const [activeTab, setActiveTab] = useState<'analysis' | 'notes' | 'pdf'>('analysis');
   const [notes, setNotes] = useState(paper.userNotes);
   
@@ -73,7 +65,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
       }
     };
   }, [activeTab, paper, onUpdatePaper]); // Re-run if paper updates (to reset base comparison) or tab changes
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -94,8 +85,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
     });
   };
 
-<<<<<<< HEAD
-=======
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = paper.url;
@@ -121,7 +110,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
   const handleZoomIn = () => setPdfZoom(z => Math.min(200, z + 25));
   const handleZoomOut = () => setPdfZoom(z => Math.max(25, z - 25));
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   return (
     <div className="h-full flex flex-col bg-[#0f172a]/95 backdrop-blur-xl absolute inset-0 z-20">
       {/* Header */}
@@ -140,8 +128,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
         </div>
         
         <div className="flex items-center space-x-2">
-<<<<<<< HEAD
-=======
           {isPdf && (
             <button
               onClick={handleDownload}
@@ -153,7 +139,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
             </button>
           )}
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           {!paper.summary && (
             <button 
               onClick={handleAnalyze}
@@ -201,8 +186,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
             >
               My Notes
             </button>
-<<<<<<< HEAD
-=======
             {isPdf && (
               <button 
                 onClick={() => setActiveTab('pdf')}
@@ -215,7 +198,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                 View PDF
               </button>
             )}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           </div>
 
           {activeTab === 'analysis' && (
@@ -238,11 +220,7 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                     </GlassCard>
                   </section>
 
-<<<<<<< HEAD
-                  {paper.citationMetadata && (paper.citationMetadata.authors?.length > 0 || paper.citationMetadata.publicationDate) && (
-=======
                   {paper.citationMetadata && (
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                     <section>
                       <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
                         <Icons.Quote size={18} className="text-green-400" />
@@ -265,15 +243,12 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                            <span className="block text-xs text-slate-500 uppercase tracking-wide">DOI</span>
                            <span className="text-slate-200">{paper.citationMetadata.doi || 'N/A'}</span>
                         </div>
-<<<<<<< HEAD
-=======
                         {paper.citationMetadata.pageCount && (
                           <div>
                             <span className="block text-xs text-slate-500 uppercase tracking-wide">Pages</span>
                             <span className="text-slate-200">{paper.citationMetadata.pageCount}</span>
                           </div>
                         )}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                       </GlassCard>
                     </section>
                   )}
@@ -303,9 +278,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
             <div className="h-full flex flex-col animate-fade-in">
               <GlassCard className="flex-1 flex flex-col overflow-hidden p-0 bg-black/20">
                 <div className="p-2 bg-white/5 border-b border-white/10 flex justify-between items-center">
-<<<<<<< HEAD
-                  <span className="text-xs text-slate-400 font-medium px-2">MARKDOWN EDITOR</span>
-=======
                   <div className="flex items-center space-x-3 px-2">
                     <span className="text-xs text-slate-400 font-medium">MARKDOWN EDITOR</span>
                     <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 flex items-center gap-1">
@@ -313,7 +285,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                       Auto-save enabled
                     </span>
                   </div>
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                   <button 
                     onClick={handleSaveNotes}
                     className="flex items-center space-x-1 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded transition-colors"
@@ -331,8 +302,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
               </GlassCard>
             </div>
           )}
-<<<<<<< HEAD
-=======
 
           {activeTab === 'pdf' && (
             <div className="h-full flex flex-col animate-fade-in">
@@ -412,7 +381,6 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
               </GlassCard>
             </div>
           )}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         </div>
       </div>
     </div>

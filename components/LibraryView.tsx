@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-=======
 import React, { useState, useEffect } from 'react';
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 import { Paper, Folder } from '../types';
 import { GlassCard } from './GlassCard';
 import { Icons } from './Icons';
 import { citationService } from '../services/citation';
-<<<<<<< HEAD
-=======
 import { synthesizeFolder } from '../services/gemini';
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
 interface LibraryViewProps {
   papers: Paper[];
@@ -19,10 +12,7 @@ interface LibraryViewProps {
   onSelectPaper: (paper: Paper) => void;
   onMovePaper: (paperId: string, folderId: string) => void;
   onDeletePaper: (paperId: string) => void;
-<<<<<<< HEAD
-=======
   onUpdateFolderSynthesis: (folderId: string, synthesis: string) => void;
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 }
 
 export const LibraryView: React.FC<LibraryViewProps> = ({ 
@@ -31,18 +21,12 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
   activeFolderId,
   onSelectPaper,
   onMovePaper,
-<<<<<<< HEAD
-  onDeletePaper
-=======
   onDeletePaper,
   onUpdateFolderSynthesis
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 }) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
-<<<<<<< HEAD
-=======
   const [showMoveMenu, setShowMoveMenu] = useState(false);
   
   // Main Export Menu State
@@ -53,17 +37,11 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [progress, setProgress] = useState(0);
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
   const filteredPapers = activeFolderId 
     ? papers.filter(p => p.folderId === activeFolderId)
     : papers;
 
-<<<<<<< HEAD
-  const currentFolderName = activeFolderId 
-    ? folders.find(f => f.id === activeFolderId)?.name 
-    : 'All Documents';
-=======
   const activeFolder = activeFolderId ? folders.find(f => f.id === activeFolderId) : null;
   const currentFolderName = activeFolder ? activeFolder.name : 'All Documents';
 
@@ -144,7 +122,6 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
       setProgress(0);
     }
   };
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
   const toggleSelection = (id: string) => {
     const newSet = new Set(selectedIds);
@@ -153,12 +130,8 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
     setSelectedIds(newSet);
   };
 
-<<<<<<< HEAD
-  const handleExport = (format: 'bibtex' | 'apa') => {
-=======
   // Export selected items
   const handleExportSelected = (format: 'bibtex' | 'apa') => {
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
     const papersToExport = papers.filter(p => selectedIds.has(p.id));
     if (papersToExport.length === 0) return;
     
@@ -172,11 +145,6 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
     setSelectedIds(new Set());
   };
 
-<<<<<<< HEAD
-  return (
-    <div className="p-6 lg:p-10 h-full overflow-y-auto">
-      <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-=======
   // Bulk Export Logic
   const handleBulkExport = (format: 'bibtex' | 'apa') => {
     let papersToExport: Paper[] = [];
@@ -215,15 +183,11 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
   return (
     <div className="p-6 lg:p-10 h-full overflow-y-auto">
       <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">{currentFolderName}</h1>
           <p className="text-slate-400">
             {filteredPapers.length} {filteredPapers.length === 1 ? 'document' : 'documents'} collected
-<<<<<<< HEAD
-=======
             {analyzedCount > 0 && ` • ${analyzedCount} analyzed`}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           </p>
         </div>
         
@@ -231,15 +195,6 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
           {isSelectionMode ? (
             <>
                <span className="text-sm text-slate-400">{selectedIds.size} selected</span>
-<<<<<<< HEAD
-               <div className="relative">
-                 <button 
-                  onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center space-x-2 hover:bg-blue-500"
-                 >
-                   <Icons.Quote size={16} />
-                   <span>Export</span>
-=======
                
                {/* Move Menu */}
                <div className="relative">
@@ -283,26 +238,17 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                  >
                    <Icons.Quote size={16} />
                    <span className="hidden sm:inline">Export</span>
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                  </button>
                  {showExportMenu && (
                    <div className="absolute top-full right-0 mt-2 w-32 bg-[#1e293b] border border-white/10 rounded-lg shadow-xl overflow-hidden z-20">
                      <button 
-<<<<<<< HEAD
-                       onClick={() => handleExport('bibtex')}
-=======
                        onClick={() => handleExportSelected('bibtex')}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                        className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-blue-600 hover:text-white"
                      >
                        BibTeX
                      </button>
                      <button 
-<<<<<<< HEAD
-                       onClick={() => handleExport('apa')}
-=======
                        onClick={() => handleExportSelected('apa')}
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                        className="w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-blue-600 hover:text-white"
                      >
                        APA
@@ -310,10 +256,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                    </div>
                  )}
                </div>
-<<<<<<< HEAD
-=======
                
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                <button 
                  onClick={() => {
                    setIsSelectionMode(false);
@@ -325,16 +268,6 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                </button>
             </>
           ) : (
-<<<<<<< HEAD
-            <button 
-              onClick={() => setIsSelectionMode(true)}
-              disabled={filteredPapers.length === 0}
-              className="bg-white/5 border border-white/10 text-slate-300 px-3 py-2 rounded-lg text-sm flex items-center space-x-2 hover:bg-white/10 disabled:opacity-50"
-            >
-              <Icons.CheckSquare size={16} />
-              <span>Select</span>
-            </button>
-=======
             <>
               {/* Main Export Menu (Bulk) */}
               <div className="relative">
@@ -392,13 +325,10 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                 <span>Select</span>
               </button>
             </>
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           )}
         </div>
       </header>
 
-<<<<<<< HEAD
-=======
       {/* Folder Synthesis Section */}
       {activeFolder && (
         <div className="mb-8">
@@ -470,7 +400,6 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         </div>
       )}
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
       {filteredPapers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-slate-500">
           <Icons.BookOpen size={48} className="mb-4 opacity-50" />
@@ -538,11 +467,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
               {!isSelectionMode && (
                 <div className="p-4 border-t border-white/5 bg-black/20 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                   <select 
-<<<<<<< HEAD
-                    className="bg-slate-800 text-xs text-slate-300 rounded border border-white/10 px-2 py-1 outline-none"
-=======
                     className="bg-slate-800 text-xs text-slate-300 rounded border border-white/10 px-2 py-1 outline-none max-w-[150px] truncate"
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => onMovePaper(paper.id, e.target.value)}
                     value={paper.folderId}

@@ -1,13 +1,4 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import { Folder, ViewState, User } from '../types';
-import { Icons } from './Icons';
-import { GlassCard } from './GlassCard';
-import { authService } from '../services/auth';
-
-interface SidebarProps {
-  folders: Folder[];
-=======
 import { Folder, ViewState, User, Paper } from '../types';
 import { Icons } from './Icons';
 import { GlassCard } from './GlassCard';
@@ -15,7 +6,6 @@ import { GlassCard } from './GlassCard';
 interface SidebarProps {
   folders: Folder[];
   papers: Paper[]; // Added papers to calculate counts
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   activeFolderId: string | null;
   currentView: ViewState;
   onNavigate: (view: ViewState) => void;
@@ -29,10 +19,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({
   folders,
-<<<<<<< HEAD
-=======
   papers,
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   activeFolderId,
   currentView,
   onNavigate,
@@ -55,8 +42,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-<<<<<<< HEAD
-=======
   const getPaperCount = (folderId: string) => {
     if (folderId === 'all') return papers.length; // Logic if we had an 'all' folder
     return papers.filter(p => p.folderId === folderId).length;
@@ -64,7 +49,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const activeFolder = folders.find(f => f.id === activeFolderId);
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   const NavItem = ({ 
     view, 
     label, 
@@ -157,27 +141,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </GlassCard>
           )}
 
-<<<<<<< HEAD
-          {folders.map(folder => (
-            <button
-              key={folder.id}
-              onClick={() => {
-                onSelectFolder(folder.id);
-                onNavigate(ViewState.LIBRARY);
-              }}
-              className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm transition-all ${
-                activeFolderId === folder.id && currentView === ViewState.LIBRARY
-                  ? 'bg-white/10 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-              }`}
-            >
-              <Icons.FolderOpen size={16} className={activeFolderId === folder.id ? 'text-yellow-400' : 'text-slate-500'} />
-              <span className="truncate">{folder.name}</span>
-            </button>
-          ))}
-        </div>
-
-=======
           {folders.map(folder => {
             const count = getPaperCount(folder.id);
             const isActive = activeFolderId === folder.id && currentView === ViewState.LIBRARY;
@@ -233,16 +196,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
            </div>
         )}
 
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         <div className="p-4 border-t border-white/10">
           {user ? (
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-<<<<<<< HEAD
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-=======
                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white shadow-md">
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                   {user.name.charAt(0)}
                 </div>
                 <div className="overflow-hidden">
@@ -251,11 +209,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <button 
                 onClick={onLogout}
-<<<<<<< HEAD
-                className="text-slate-400 hover:text-red-400 transition-colors"
-=======
                 className="text-slate-400 hover:text-red-400 transition-colors p-1 rounded hover:bg-white/5"
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                 title="Log Out"
               >
                 <Icons.LogOut size={16} />

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { GroundingSource, SearchFilters } from "../types";
-=======
 import { GroundingSource, SearchFilters, Paper } from "../types";
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
 // NOTE: This service now calls the backend /api endpoints.
 // This requires the app to be deployed (e.g., on Vercel) to work correctly.
@@ -67,8 +63,6 @@ export const analyzePaper = async (title: string, url: string): Promise<{ summar
       citationMetadata: { authors: [], publicationDate: '', publisher: '' }
     };
   }
-<<<<<<< HEAD
-=======
 };
 
 export const synthesizeFolder = async (papers: Paper[], folderName: string): Promise<string> => {
@@ -96,5 +90,4 @@ export const synthesizeFolder = async (papers: Paper[], folderName: string): Pro
     console.error("Synthesis error:", error);
     return "Unable to synthesize folder. Ensure backend is deployed.";
   }
->>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 };
