@@ -1,7 +1,14 @@
 import { GoogleGenAI } from "@google/genai";
 
+<<<<<<< HEAD
 // This file will run on the Vercel Server
 // It securely uses the process.env.API_KEY
+=======
+export const config = {
+  runtime: 'edge',
+};
+
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 export default async function handler(request: Request) {
   if (request.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
+=======
+import React, { useState, useEffect, useRef } from 'react';
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 import { Paper } from '../types';
 import { GlassCard } from './GlassCard';
 import { Icons } from './Icons';
@@ -12,8 +16,64 @@ interface DocumentDetailProps {
 
 export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, onUpdatePaper }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+<<<<<<< HEAD
   const [activeTab, setActiveTab] = useState<'analysis' | 'notes'>('analysis');
   const [notes, setNotes] = useState(paper.userNotes);
+=======
+  const [activeTab, setActiveTab] = useState<'analysis' | 'notes' | 'pdf'>('analysis');
+  const [notes, setNotes] = useState(paper.userNotes);
+  
+  // PDF Controls State
+  const [pdfPage, setPdfPage] = useState(1);
+  const [pdfZoom, setPdfZoom] = useState(100);
+  
+  // Ref to track the latest notes value for the interval/cleanup closures
+  const notesRef = useRef(notes);
+
+  // Sync ref with state
+  useEffect(() => {
+    notesRef.current = notes;
+  }, [notes]);
+
+  // Check if the URL is likely a PDF
+  const isPdf = paper.url.toLowerCase().endsWith('.pdf') || 
+                paper.url.includes('/pdf/') || 
+                paper.url.includes('format=pdf');
+  
+  const totalPages = paper.citationMetadata?.pageCount;
+
+  // Auto-save logic
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+
+    if (activeTab === 'notes') {
+      // 1. Set up 30s interval
+      interval = setInterval(() => {
+        if (notesRef.current !== paper.userNotes) {
+          // console.log("Auto-saving notes...");
+          onUpdatePaper({
+            ...paper,
+            userNotes: notesRef.current
+          });
+        }
+      }, 30000);
+    }
+
+    // 2. Cleanup: Runs on unmount or when activeTab changes
+    return () => {
+      if (interval) clearInterval(interval);
+      
+      // Save if we are leaving the notes tab (or closing document) and have unsaved changes
+      if (activeTab === 'notes' && notesRef.current !== paper.userNotes) {
+        // console.log("Saving notes on exit...");
+        onUpdatePaper({
+          ...paper,
+          userNotes: notesRef.current
+        });
+      }
+    };
+  }, [activeTab, paper, onUpdatePaper]); // Re-run if paper updates (to reset base comparison) or tab changes
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -34,6 +94,34 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
     });
   };
 
+<<<<<<< HEAD
+=======
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = paper.url;
+    // Sanitize filename
+    const filename = paper.title.replace(/[^a-z0-9]/gi, '_').substring(0, 50) + '.pdf';
+    link.download = filename;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // PDF Viewer Helpers
+  const getViewerUrl = () => {
+    // Strip existing hash params
+    const cleanUrl = paper.url.split('#')[0];
+    return `${cleanUrl}#page=${pdfPage}&zoom=${pdfZoom}`;
+  };
+
+  const handlePrevPage = () => setPdfPage(p => Math.max(1, p - 1));
+  const handleNextPage = () => setPdfPage(p => p + 1);
+  const handleZoomIn = () => setPdfZoom(z => Math.min(200, z + 25));
+  const handleZoomOut = () => setPdfZoom(z => Math.max(25, z - 25));
+
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   return (
     <div className="h-full flex flex-col bg-[#0f172a]/95 backdrop-blur-xl absolute inset-0 z-20">
       {/* Header */}
@@ -52,6 +140,20 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
         </div>
         
         <div className="flex items-center space-x-2">
+<<<<<<< HEAD
+=======
+          {isPdf && (
+            <button
+              onClick={handleDownload}
+              className="bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white px-3 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-all mr-2"
+              title="Download PDF"
+            >
+              <Icons.Download size={16} />
+              <span className="hidden sm:inline">Download</span>
+            </button>
+          )}
+
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           {!paper.summary && (
             <button 
               onClick={handleAnalyze}
@@ -99,6 +201,21 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
             >
               My Notes
             </button>
+<<<<<<< HEAD
+=======
+            {isPdf && (
+              <button 
+                onClick={() => setActiveTab('pdf')}
+                className={`pb-3 text-sm font-medium transition-colors border-b-2 ${
+                  activeTab === 'pdf' 
+                    ? 'border-blue-500 text-blue-400' 
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                View PDF
+              </button>
+            )}
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           </div>
 
           {activeTab === 'analysis' && (
@@ -121,7 +238,11 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                     </GlassCard>
                   </section>
 
+<<<<<<< HEAD
                   {paper.citationMetadata && (paper.citationMetadata.authors?.length > 0 || paper.citationMetadata.publicationDate) && (
+=======
+                  {paper.citationMetadata && (
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                     <section>
                       <h3 className="text-lg font-semibold text-white mb-3 flex items-center space-x-2">
                         <Icons.Quote size={18} className="text-green-400" />
@@ -144,6 +265,15 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
                            <span className="block text-xs text-slate-500 uppercase tracking-wide">DOI</span>
                            <span className="text-slate-200">{paper.citationMetadata.doi || 'N/A'}</span>
                         </div>
+<<<<<<< HEAD
+=======
+                        {paper.citationMetadata.pageCount && (
+                          <div>
+                            <span className="block text-xs text-slate-500 uppercase tracking-wide">Pages</span>
+                            <span className="text-slate-200">{paper.citationMetadata.pageCount}</span>
+                          </div>
+                        )}
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                       </GlassCard>
                     </section>
                   )}
@@ -173,7 +303,17 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
             <div className="h-full flex flex-col animate-fade-in">
               <GlassCard className="flex-1 flex flex-col overflow-hidden p-0 bg-black/20">
                 <div className="p-2 bg-white/5 border-b border-white/10 flex justify-between items-center">
+<<<<<<< HEAD
                   <span className="text-xs text-slate-400 font-medium px-2">MARKDOWN EDITOR</span>
+=======
+                  <div className="flex items-center space-x-3 px-2">
+                    <span className="text-xs text-slate-400 font-medium">MARKDOWN EDITOR</span>
+                    <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20 flex items-center gap-1">
+                      <span className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></span>
+                      Auto-save enabled
+                    </span>
+                  </div>
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
                   <button 
                     onClick={handleSaveNotes}
                     className="flex items-center space-x-1 text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded transition-colors"
@@ -191,6 +331,88 @@ export const DocumentDetail: React.FC<DocumentDetailProps> = ({ paper, onClose, 
               </GlassCard>
             </div>
           )}
+<<<<<<< HEAD
+=======
+
+          {activeTab === 'pdf' && (
+            <div className="h-full flex flex-col animate-fade-in">
+              {/* PDF Toolbar */}
+              <div className="mb-4 flex items-center justify-center space-x-4 p-2 bg-white/5 rounded-lg border border-white/10">
+                {/* Page Navigation */}
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={handlePrevPage}
+                    className="p-1.5 rounded hover:bg-white/10 text-slate-300 hover:text-white disabled:opacity-50"
+                    disabled={pdfPage <= 1}
+                    title="Previous Page"
+                  >
+                    <Icons.ChevronLeft size={16} />
+                  </button>
+                  
+                  <div className="flex items-center space-x-1 bg-black/20 rounded-md border border-white/5 px-2 py-1">
+                    <span className="text-xs text-slate-500 font-medium">Page</span>
+                    <input 
+                      type="number"
+                      min={1}
+                      max={totalPages || 999}
+                      value={pdfPage}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (!isNaN(val)) setPdfPage(val);
+                      }}
+                      className="w-10 bg-transparent text-center text-sm text-white font-mono focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <span className="text-sm text-slate-500 font-mono border-l border-white/10 pl-2 ml-1 whitespace-nowrap">
+                      {totalPages ? `/ ${totalPages}` : ''}
+                    </span>
+                  </div>
+
+                  <button 
+                    onClick={handleNextPage}
+                    className="p-1.5 rounded hover:bg-white/10 text-slate-300 hover:text-white disabled:opacity-50"
+                    disabled={totalPages ? pdfPage >= totalPages : false}
+                    title="Next Page"
+                  >
+                    <Icons.ChevronRight size={16} />
+                  </button>
+                </div>
+
+                <div className="w-px h-4 bg-white/10"></div>
+
+                {/* Zoom Controls */}
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={handleZoomOut}
+                    className="p-1.5 rounded hover:bg-white/10 text-slate-300 hover:text-white"
+                    title="Zoom Out"
+                  >
+                    <Icons.Minus size={16} />
+                  </button>
+                  <span className="text-sm font-mono text-white min-w-[3rem] text-center">{pdfZoom}%</span>
+                  <button 
+                    onClick={handleZoomIn}
+                    className="p-1.5 rounded hover:bg-white/10 text-slate-300 hover:text-white"
+                    title="Zoom In"
+                  >
+                    <Icons.Plus size={16} />
+                  </button>
+                </div>
+              </div>
+
+              <GlassCard className="flex-1 p-0 overflow-hidden bg-slate-900/50 relative">
+                 <iframe 
+                   key={getViewerUrl()} // Force re-render if needed, but usually src update handles it
+                   src={getViewerUrl()} 
+                   className="w-full h-full min-h-[600px] border-none"
+                   title="PDF Document Viewer"
+                 />
+                 <div className="absolute top-0 right-0 p-2 bg-black/50 backdrop-blur pointer-events-none">
+                    <span className="text-xs text-slate-400">If controls don't update view, the source might not support them.</span>
+                 </div>
+              </GlassCard>
+            </div>
+          )}
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         </div>
       </div>
     </div>

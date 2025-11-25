@@ -70,6 +70,13 @@ function App() {
     setFolders(prev => [...prev, newFolder]);
   };
 
+<<<<<<< HEAD
+=======
+  const handleUpdateFolderSynthesis = (folderId: string, synthesis: string) => {
+    setFolders(prev => prev.map(f => f.id === folderId ? { ...f, synthesis } : f));
+  };
+
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
   const selectedPaper = papers.find(p => p.id === selectedPaperId);
 
   if (isLoading) {
@@ -99,6 +106,10 @@ function App() {
 
       <Sidebar 
         folders={folders}
+<<<<<<< HEAD
+=======
+        papers={papers}
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
         activeFolderId={activeFolderId}
         currentView={view}
         onNavigate={(v) => {
@@ -135,6 +146,10 @@ function App() {
               if (p) handleUpdatePaper({ ...p, folderId: fId });
             }}
             onDeletePaper={handleDeletePaper}
+<<<<<<< HEAD
+=======
+            onUpdateFolderSynthesis={handleUpdateFolderSynthesis}
+>>>>>>> ba310f194abb9585a2d171538e6e4a1b5f5a70dc
           />
         )}
 
