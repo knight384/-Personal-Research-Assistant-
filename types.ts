@@ -16,6 +16,7 @@ export interface Folder {
   id: string;
   name: string;
   icon?: string;
+  synthesis?: string; // AI generated summary of the folder
 }
 
 export interface GroundingSource {
@@ -28,6 +29,7 @@ export interface CitationMetadata {
   publicationDate?: string;
   publisher?: string;
   doi?: string;
+  pageCount?: number;
 }
 
 export interface Paper {

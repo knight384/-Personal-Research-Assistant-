@@ -8,6 +8,7 @@ import {
   ExternalLink, 
   Bot, 
   ChevronRight, 
+  ChevronLeft, 
   Menu,
   X,
   Sparkles,
@@ -24,7 +25,14 @@ import {
   Quote,
   Calendar,
   PenTool,
-  Hash
+  Hash,
+  Minus,
+  ZoomIn,
+  ZoomOut,
+  Maximize,
+  Lightbulb,
+  History,
+  Clock
 } from 'lucide-react';
 
 export const Icons = {
@@ -36,6 +44,7 @@ export const Icons = {
   ExternalLink,
   Bot,
   ChevronRight,
+  ChevronLeft,
   Menu,
   X,
   Sparkles,
@@ -52,5 +61,12 @@ export const Icons = {
   Quote,
   Calendar,
   PenTool,
-  Hash
+  Hash,
+  Minus,
+  ZoomIn,
+  ZoomOut,
+  Maximize,
+  Lightbulb,
+  History,
+  Clock
 };

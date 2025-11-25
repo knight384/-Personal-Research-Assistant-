@@ -1,4 +1,4 @@
-import { GroundingSource, SearchFilters } from "../types";
+import { GroundingSource, SearchFilters, Paper } from "../types";
 
 // NOTE: This service now calls the backend /api endpoints.
 // This requires the app to be deployed (e.g., on Vercel) to work correctly.
@@ -62,5 +62,32 @@ export const analyzePaper = async (title: string, url: string): Promise<{ summar
       findings: ["Server connection failed."],
       citationMetadata: { authors: [], publicationDate: '', publisher: '' }
     };
+  }
+};
+
+export const synthesizeFolder = async (papers: Paper[], folderName: string): Promise<string> => {
+  try {
+    const response = await fetch('/api/synthesize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        papers: papers.map(p => ({
+          title: p.title,
+          summary: p.summary,
+          keyFindings: p.keyFindings
+        })),
+        folderName 
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.synthesis;
+  } catch (error) {
+    console.error("Synthesis error:", error);
+    return "Unable to synthesize folder. Ensure backend is deployed.";
   }
 };

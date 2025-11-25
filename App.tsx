@@ -70,6 +70,10 @@ function App() {
     setFolders(prev => [...prev, newFolder]);
   };
 
+  const handleUpdateFolderSynthesis = (folderId: string, synthesis: string) => {
+    setFolders(prev => prev.map(f => f.id === folderId ? { ...f, synthesis } : f));
+  };
+
   const selectedPaper = papers.find(p => p.id === selectedPaperId);
 
   if (isLoading) {
@@ -99,6 +103,7 @@ function App() {
 
       <Sidebar 
         folders={folders}
+        papers={papers}
         activeFolderId={activeFolderId}
         currentView={view}
         onNavigate={(v) => {
@@ -135,6 +140,7 @@ function App() {
               if (p) handleUpdatePaper({ ...p, folderId: fId });
             }}
             onDeletePaper={handleDeletePaper}
+            onUpdateFolderSynthesis={handleUpdateFolderSynthesis}
           />
         )}
 
