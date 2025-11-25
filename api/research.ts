@@ -7,7 +7,8 @@ export default async function handler(req, res) {
 
   try {
     const { topic, filters } = req.body;
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const API_KEY = process.env.GEMINI_API_KEY || process.env.API_KEY;
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
 
     let prompt = `Perform a comprehensive research search on the topic: "${topic}". `;
   

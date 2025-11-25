@@ -7,7 +7,8 @@ export default async function handler(req, res) {
 
   try {
     const { papers, folderName } = req.body;
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const API_KEY = process.env.GEMINI_API_KEY || process.env.API_KEY;
+    const ai = new GoogleGenAI({ apiKey: API_KEY });
 
     const papersContext = papers.map((p, index) => `
     [Paper ${index + 1}]
